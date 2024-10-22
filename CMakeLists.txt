@@ -104,7 +104,7 @@ ExternalProject_Add(curl
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/curl
     ${LIBCURL_EXTRA_BUILD_ARGS}
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 ExternalProject_Add(grpc-repo
   PREFIX grpc-repo
@@ -119,8 +119,8 @@ ExternalProject_Add(grpc-repo
   CMAKE_CACHE_ARGS
     -DCMAKE_CXX_STANDARD:STRING=${TRITON_MIN_CXX_STANDARD}
   # TODO(nnoble): remove this patch when the fix for https://github.com/abseil/abseil-cpp/issues/1769 is integrated within our dependencies
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/patch.py apply -i -d ${CMAKE_CURRENT_BINARY_DIR}/grpc-repo/src/grpc/third_party/abseil-cpp ${CMAKE_CURRENT_SOURCE_DIR}/tools/abseil_no_rebuild.patch
-  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG} --dest-basename=grpc_1.54.3
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/patch.py apply -i -d ${CMAKE_CURRENT_BINARY_DIR}/grpc-repo/src/grpc/third_party/abseil-cpp ${CMAKE_CURRENT_SOURCE_DIR}/tools/abseil_no_rebuild.patch
+  COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG} --dest-basename=grpc_1.54.3
 )
 #
 # Build nlohmann/json
@@ -139,7 +139,7 @@ ExternalProject_Add(nlohmann-json
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DBUILD_SHARED_LIBS:STRING=yes
     -DBUILD_TESTING:BOOL=OFF
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG} --dest-basename=nlohmann-json
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG} --dest-basename=nlohmann-json
 )
 #
 # Build absl (abseil) project from grpc-repo
@@ -301,7 +301,7 @@ ExternalProject_Add(libevent
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/libevent
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 #
 # Build patched libevhtp
@@ -326,7 +326,7 @@ ExternalProject_Add(libevhtp
     -DCMAKE_PREFIX_PATH:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/libevent
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/libevhtp
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
   DEPENDS libevent
 )
 else()
@@ -347,7 +347,7 @@ ExternalProject_Add(libevhtp
     -DLibevent_DIR:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/libevent/lib/cmake/libevent
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/libevhtp
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
   DEPENDS libevent
 )
 endif()
@@ -371,7 +371,7 @@ ExternalProject_Add(prometheus-cpp
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/prometheus-cpp
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 #
 # Build crc32c
@@ -396,7 +396,7 @@ ExternalProject_Add(crc32c
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/crc32c
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 # This is necessary because google-cloud-cpp
 # does not pass protobuf_DIR and gRPC_DIR etc to its
@@ -432,7 +432,7 @@ ExternalProject_Add(google-cloud-cpp
     -Dnlohmann_json_DIR:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/nlohmann_json/${LIB_DIR}/cmake/nlohmann_json
     -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
     -DCrc32c_DIR:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/crc32c/${LIB_DIR}/cmake/Crc32c
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
   DEPENDS grpc c-ares protobuf crc32c absl nlohmann-json
 )
 #
@@ -458,7 +458,7 @@ ExternalProject_Add(azure-sdk
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/azure-sdk
     -DDISABLE_AZURE_CORE_OPENTELEMETRY:BOOL=ON
     -DENV{AZURE_SDK_DISABLE_AUTO_VCPKG}:BOOL=ON
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
   DEPENDS curl
 )
 #
@@ -475,7 +475,7 @@ ExternalProject_Add(cnmem
     -DCMAKE_CXX_STANDARD:STRING=${TRITON_MIN_CXX_STANDARD}
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/cnmem
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 #
 # Build aws-sdk-cpp
@@ -498,7 +498,7 @@ ExternalProject_Add(aws-sdk-cpp
     -DENABLE_TESTING:BOOL=OFF
     -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
     -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/aws-sdk-cpp
-  PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+  PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
 )
 #
 # Build OpenTelemetry C++ library
@@ -537,7 +537,7 @@ if (NOT WIN32)
       -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
       -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
       -DCMAKE_INSTALL_PREFIX:PATH=${TRITON_THIRD_PARTY_INSTALL_PREFIX}/opentelemetry-cpp
-    PATCH_COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
+    PATCH_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/tools/install_src.py --src <SOURCE_DIR> ${INSTALL_SRC_DEST_ARG}
     DEPENDS grpc nlohmann-json curl protobuf
   )
 endif()
